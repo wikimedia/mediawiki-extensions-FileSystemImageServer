@@ -8,9 +8,9 @@
 namespace MediaWiki\Extension\FileSystemImageServer\Specials;
 
 use Html;
+use MediaWiki\MediaWikiServices;
 use Message;
 use SpecialPage;
-use MediaWiki\MediaWikiServices;
 
 class SpecialFSIS extends SpecialPage {
 	public function __construct() {
@@ -26,21 +26,25 @@ class SpecialFSIS extends SpecialPage {
 	}
 
 	public function execute( $par ) {
-		global $wgFSISGroups;
+		$fsisConfig = $this->getConfig()->get( 'FSISGroups' );
 
-		$out = $this->getOutput();
+		$outputPage = $this->getOutput();
 		$req = $this->getRequest();
 
 		$group = $req->getText( 'g' );
 		$filename = $req->getText( 'f' );
 
-		if ( !isset( $wgFSISGroups[ $group ] ) ) {
+		if ( !isset( $fsisConfig[ $group ] ) ) {
 			$this->showError( 400, $this->msg( 'fsis-error-unknowngroup' ) );
 			return;
 		}
 
-		$config = $wgFSISGroups[ $group ];
-		if ( isset( $config[ 'right' ] ) && !$this->including() && !$this->getUser()->isAllowed( $config[ 'right' ] ) ) {
+		$config = $fsisConfig[ $group ];
+		if (
+			   isset( $config[ 'right' ] )
+			&& !$this->including()
+			&& !$this->getUser()->isAllowed( $config[ 'right' ] )
+		) {
 			// Possible attempt at path traversal or misconfiguration
 			$this->showError( 403, $this->msg( 'fsis-error-unauthorized' ) );
 			return;
@@ -63,9 +67,8 @@ class SpecialFSIS extends SpecialPage {
 			return;
 		}
 
-
 		$type = $this->getMimeType( $path );
-		if ( !in_array( $type, (array)($config[ 'mimetypes' ] ?? []) ) ) {
+		if ( !in_array( $type, (array)( $config[ 'mimetypes' ] ?? [] ) ) ) {
 			$this->showError( 500, $this->msg( 'fsis-error-unknowfile' ), $fallback );
 			return;
 		}
@@ -88,7 +91,7 @@ class SpecialFSIS extends SpecialPage {
 
 			$imgParams = array_filter( $imgParams );
 
-			$this->getOutput()->addHTML(
+			$outputPage->addHTML(
 				Html::rawElement(
 					'a',
 					[ 'href' => $url ],
@@ -96,7 +99,7 @@ class SpecialFSIS extends SpecialPage {
 				)
 			);
 		} else {
-			$this->getOutput()->disable();
+			$outputPage->disable();
 			header( "Content-Type: $type" );
 			header( 'Cache-Control: private, max-age=3600' );
 			header( 'Expires: ' . wfTimestamp( TS_RFC2822, time() + 3600 ) );
@@ -114,16 +117,17 @@ class SpecialFSIS extends SpecialPage {
 	}
 
 	private function showError( int $statusCode, Message $msg, $fallback = null ) {
+		$outputPage = $this->getOutput();
 		if ( $this->including() ) {
-			$this->getOutput()->addWikiText( "<div class='errorbox'>{$msg->plain()}</div>" );
+			$outputPage->addWikiTextAsInterface( "<div class='errorbox'>{$msg->plain()}</div>" );
 		} elseif ( $fallback ) {
-			$this->getOutput()->disable();
+			$outputPage->disable();
 			$type = $this->getMimeType( $fallback );
 			header( "Content-Type: $type" );
 			header( 'Content-Length: ' . filesize( $fallback ) );
 			readfile( $fallback );
 		} else {
-			$this->getOutput()->disable();
+			$outputPage->disable();
 			header( 'Content-Type: text/plain' );
 			http_response_code( $statusCode );
 			echo $msg->plain();
