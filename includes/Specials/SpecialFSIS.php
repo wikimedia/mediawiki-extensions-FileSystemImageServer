@@ -1,9 +1,5 @@
 <?php
-/**
- * @file
- * @author Niklas Laxström
- * @license MIT
- */
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\FileSystemImageServer\Specials;
 
@@ -12,6 +8,10 @@ use MediaWiki\MediaWikiServices;
 use Message;
 use SpecialPage;
 
+/*
+ * @author Niklas Laxström
+ * @license MIT
+ */
 class SpecialFSIS extends SpecialPage {
 	public function __construct() {
 		parent::__construct( 'FSIS' );
@@ -39,11 +39,13 @@ class SpecialFSIS extends SpecialPage {
 			return;
 		}
 
+		$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
+
 		$config = $fsisConfig[ $group ];
 		if (
 			   isset( $config[ 'right' ] )
 			&& !$this->including()
-			&& !$this->getUser()->isAllowed( $config[ 'right' ] )
+			&& !$permissionManager->userHasRight( $this->getUser(), $config[ 'right' ] )
 		) {
 			// Possible attempt at path traversal or misconfiguration
 			$this->showError( 403, $this->msg( 'fsis-error-unauthorized' ) );
@@ -108,7 +110,7 @@ class SpecialFSIS extends SpecialPage {
 		}
 	}
 
-	private function getMimeType( $path ) {
+	private function getMimeType( string $path ): string {
 		$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 		$ext = pathinfo( $path, PATHINFO_EXTENSION );
 		$type = $magic->guessMimeType( $path, false );
@@ -116,7 +118,7 @@ class SpecialFSIS extends SpecialPage {
 		return $type;
 	}
 
-	private function showError( int $statusCode, Message $msg, $fallback = null ) {
+	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
 		$outputPage = $this->getOutput();
 		if ( $this->including() ) {
 			$outputPage->addWikiTextAsInterface( "<div class='errorbox'>{$msg->plain()}</div>" );
