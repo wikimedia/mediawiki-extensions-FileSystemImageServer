@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kizule"
+		]
+	},
+	"fsis-desc": "Prikazuje slike iz sistema datoteka i opcionalno proverava korisnička prava za njihov prikaz."
+}

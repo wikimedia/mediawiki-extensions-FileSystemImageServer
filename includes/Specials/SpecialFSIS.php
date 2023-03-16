@@ -25,6 +25,9 @@ class SpecialFSIS extends SpecialPage {
 		return false;
 	}
 
+	/**
+	 * @param string|null $par
+	 */
 	public function execute( $par ) {
 		$fsisConfig = $this->getConfig()->get( 'FSISGroups' );
 
@@ -110,6 +113,10 @@ class SpecialFSIS extends SpecialPage {
 		}
 	}
 
+	/**
+	 * @param string $path
+	 * @return string
+	 */
 	private function getMimeType( string $path ): string {
 		$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 		$ext = pathinfo( $path, PATHINFO_EXTENSION );
@@ -118,6 +125,11 @@ class SpecialFSIS extends SpecialPage {
 		return $type;
 	}
 
+	/**
+	 * @param int $statusCode
+	 * @param Message $msg
+	 * @param string|null $fallback
+	 */
 	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
 		$outputPage = $this->getOutput();
 		if ( $this->including() ) {

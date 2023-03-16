@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nikerabbit"
+		]
+	},
+	"fsis-desc": "Displays images from the file system and optionally checks user rights for viewing them."
+}

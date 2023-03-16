@@ -7,12 +7,15 @@
 	"license-name": "MIT",
 	"type": "other",
 	"requires": {
-		"MediaWiki": ">= 1.33.0"
+		"MediaWiki": ">= 1.35.0"
 	},
 	"MessagesDirs": {
 		"fsis": [
 			"i18n"
 		]
+	},
+	"ExtensionMessagesFiles": {
+		"FSIS": "includes/FileSystemImageServer.alias.php"
 	},
 	"SpecialPages": {
 		"FSIS": "MediaWiki\\Extension\\FileSystemImageServer\\Specials\\SpecialFSIS"
