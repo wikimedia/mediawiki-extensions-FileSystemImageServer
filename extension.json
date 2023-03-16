@@ -1,0 +1,27 @@
+{
+	"name": "FileSystemImageServer",
+	"version": "1.0.0",
+	"author": "Niklas Laxström",
+	"url": "https://www.mediawiki.org/wiki/Extension:FileSystemImageServer",
+	"descriptionmsg": "fsis-desc",
+	"license-name": "MIT",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.33.0"
+	},
+	"MessagesDirs": {
+		"fsis": [
+			"i18n"
+		]
+	},
+	"SpecialPages": {
+		"FSIS": "MediaWiki\\Extension\\FileSystemImageServer\\Specials\\SpecialFSIS"
+	},
+	"AutoloadClasses": {
+		"MediaWiki\\Extension\\FileSystemImageServer\\Specials\\SpecialFSIS": "includes/Specials/SpecialFSIS.php"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\FileSystemImageServer\\": "includes/"
+	},
+	"manifest_version": 2
+}
