@@ -1,0 +1,6 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"fsis-desc": "Zeigt Bilder aus dem Dateisystem an und prüft optional die Benutzerrechte zum Anzeigen."
+}

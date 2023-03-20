@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"fsis-desc": "Prikaže slike iz datotečnega sistema in po želji preveri uporabniške pravice za ogled."
+}

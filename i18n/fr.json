@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Verdy p"
+		]
+	},
+	"fsis-desc": "Affiche des images du système de fichiers et vérifie facultativement les droits des utilisateurs permettant de les visualiser."
+}
