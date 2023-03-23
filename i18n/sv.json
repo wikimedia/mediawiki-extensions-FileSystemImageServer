@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Sabelöga"
+		]
+	},
+	"fsis-desc": "Visar bilder från filsystemet och kontrollerar eventuellt användarrättigheterna för att se dem."
+}
