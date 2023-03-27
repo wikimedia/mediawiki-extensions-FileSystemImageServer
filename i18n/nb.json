@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"fsis-desc": "Viser bilder fra filsystemet og kan valgfritt sjekke brukerrettigheter for å vise dem."
+}
