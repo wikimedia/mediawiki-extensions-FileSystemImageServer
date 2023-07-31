@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
-			"Vlad5250"
+			"Winston Sung"
 		]
 	},
 	"fsis-desc": "Prikazuje slike iz sistema datoteka i, opcionalno, provjerava korisnička prava za njihov prikaz."
