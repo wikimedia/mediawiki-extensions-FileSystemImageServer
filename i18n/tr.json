@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hedda"
+		]
+	},
+	"fsis-desc": "Dosya sistemindeki görüntüleri görüntüler ve isteğe bağlı olarak bunları görüntülemeye ilişkin kullanıcı haklarını kontrol eder."
+}
