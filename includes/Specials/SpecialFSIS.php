@@ -133,7 +133,7 @@ class SpecialFSIS extends SpecialPage {
 	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
 		$outputPage = $this->getOutput();
 		if ( $this->including() ) {
-			$outputPage->addWikiTextAsInterface( "<div class='errorbox'>{$msg->plain()}</div>" );
+			$outputPage->addWikiTextAsInterface( Html::errorBox( $msg->plain() ) );
 		} elseif ( $fallback ) {
 			$outputPage->disable();
 			$type = $this->getMimeType( $fallback );
