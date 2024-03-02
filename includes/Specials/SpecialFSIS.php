@@ -4,8 +4,9 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\FileSystemImageServer\Specials;
 
 use Html;
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Permissions\PermissionManager;
 use Message;
+use MimeAnalyzer;
 use SpecialPage;
 
 /*
@@ -13,22 +14,30 @@ use SpecialPage;
  * @license MIT
  */
 class SpecialFSIS extends SpecialPage {
-	public function __construct() {
+	private MimeAnalyzer $mimeAnalyzer;
+	private PermissionManager $permissionManager;
+
+	public function __construct(
+		MimeAnalyzer $mimeAnalyzer,
+		PermissionManager $permissionManager
+	) {
 		parent::__construct( 'FSIS' );
+		$this->mimeAnalyzer = $mimeAnalyzer;
+		$this->permissionManager = $permissionManager;
 	}
 
-	public function isIncludable() {
+	/** @inheritDoc */
+	public function isIncludable(): bool {
 		return true;
 	}
 
-	public function isListed() {
+	/** @inheritDoc */
+	public function isListed(): bool {
 		return false;
 	}
 
-	/**
-	 * @param string|null $par
-	 */
-	public function execute( $par ) {
+	/** @inheritDoc */
+	public function execute( $par ): void {
 		$fsisConfig = $this->getConfig()->get( 'FSISGroups' );
 
 		$outputPage = $this->getOutput();
@@ -42,13 +51,11 @@ class SpecialFSIS extends SpecialPage {
 			return;
 		}
 
-		$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
-
 		$config = $fsisConfig[ $group ];
 		if (
 			   isset( $config[ 'right' ] )
 			&& !$this->including()
-			&& !$permissionManager->userHasRight( $this->getUser(), $config[ 'right' ] )
+			&& !$this->permissionManager->userHasRight( $this->getUser(), $config[ 'right' ] )
 		) {
 			// Possible attempt at path traversal or misconfiguration
 			$this->showError( 403, $this->msg( 'fsis-error-unauthorized' ) );
@@ -113,23 +120,13 @@ class SpecialFSIS extends SpecialPage {
 		}
 	}
 
-	/**
-	 * @param string $path
-	 * @return string
-	 */
 	private function getMimeType( string $path ): string {
-		$magic = MediaWikiServices::getInstance()->getMimeAnalyzer();
 		$ext = pathinfo( $path, PATHINFO_EXTENSION );
-		$type = $magic->guessMimeType( $path, false );
-		$type = $magic->improveTypeFromExtension( $type, $ext );
+		$type = $this->mimeAnalyzer->guessMimeType( $path, false );
+		$type = $this->mimeAnalyzer->improveTypeFromExtension( $type, $ext );
 		return $type;
 	}
 
-	/**
-	 * @param int $statusCode
-	 * @param Message $msg
-	 * @param string|null $fallback
-	 */
 	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
 		$outputPage = $this->getOutput();
 		if ( $this->including() ) {
