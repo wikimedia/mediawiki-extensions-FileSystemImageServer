@@ -1,5 +1,5 @@
 {
-	"name": "FileSystemImageServer",
+	"name": "filesystem-image-server",
 	"private": true,
 	"scripts": {
 		"test": "grunt test"

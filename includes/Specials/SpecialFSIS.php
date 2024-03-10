@@ -79,6 +79,7 @@ class SpecialFSIS extends SpecialPage {
 			return;
 		}
 
+		// @phan-suppress-next-line SecurityCheck-PathTraversal
 		$type = $this->getMimeType( $path );
 		if ( !in_array( $type, (array)( $config[ 'mimetypes' ] ?? [] ) ) ) {
 			$this->showError( 500, $this->msg( 'fsis-error-unknowfile' ), $fallback );
@@ -123,8 +124,7 @@ class SpecialFSIS extends SpecialPage {
 	private function getMimeType( string $path ): string {
 		$ext = pathinfo( $path, PATHINFO_EXTENSION );
 		$type = $this->mimeAnalyzer->guessMimeType( $path, false );
-		$type = $this->mimeAnalyzer->improveTypeFromExtension( $type, $ext );
-		return $type;
+		return $this->mimeAnalyzer->improveTypeFromExtension( $type, $ext ) ?? $type;
 	}
 
 	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
@@ -141,6 +141,7 @@ class SpecialFSIS extends SpecialPage {
 			$outputPage->disable();
 			header( 'Content-Type: text/plain' );
 			http_response_code( $statusCode );
+			// @phan-suppress-next-line SecurityCheck-XSS
 			echo $msg->plain();
 		}
 	}
