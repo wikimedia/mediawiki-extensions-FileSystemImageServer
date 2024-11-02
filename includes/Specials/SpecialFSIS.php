@@ -127,7 +127,7 @@ class SpecialFSIS extends SpecialPage {
 		return $this->mimeAnalyzer->improveTypeFromExtension( $type, $ext ) ?? $type;
 	}
 
-	private function showError( int $statusCode, Message $msg, string $fallback = null ): void {
+	private function showError( int $statusCode, Message $msg, ?string $fallback = null ): void {
 		$outputPage = $this->getOutput();
 		if ( $this->including() ) {
 			$outputPage->addWikiTextAsInterface( Html::errorBox( $msg->plain() ) );
