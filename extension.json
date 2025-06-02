@@ -17,6 +17,9 @@
 	"ExtensionMessagesFiles": {
 		"FSIS": "includes/FileSystemImageServer.alias.php"
 	},
+	"config": {
+		"FSISGroups": { "value": false }
+	},
 	"SpecialPages": {
 		"FSIS": {
 			"class": "MediaWiki\\Extension\\FileSystemImageServer\\Specials\\SpecialFSIS",

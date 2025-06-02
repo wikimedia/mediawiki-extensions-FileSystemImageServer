@@ -3,7 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\FileSystemImageServer\Specials;
 
-use Html;
+use MediaWiki\Html\Html;
 use MediaWiki\Permissions\PermissionManager;
 use Message;
 use MimeAnalyzer;
