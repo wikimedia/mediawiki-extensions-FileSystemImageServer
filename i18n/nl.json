@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie"
+			"McDutchie",
+			"Siebrand"
 		]
 	},
-	"fsis-desc": "Toont afbeeldingen uit het bestandssysteem en controleert desgewenst de rechten van de gebruiker om ze te bekijken."
+	"fsis-desc": "Geeft afbeeldingen weer uit het bestandssysteem en controleert desgewenst de rechten van de gebruiker om ze te bekijken."
 }
