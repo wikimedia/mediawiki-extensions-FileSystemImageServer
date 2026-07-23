@@ -113,10 +113,11 @@ class SpecialFSIS extends SpecialPage {
 			);
 		} else {
 			$outputPage->disable();
-			header( "Content-Type: $type" );
-			header( 'Cache-Control: private, max-age=3600' );
-			header( 'Expires: ' . wfTimestamp( TS_RFC2822, time() + 3600 ) );
-			header( 'Content-Length: ' . filesize( $path ) );
+			$response = $req->response();
+			$response->header( "Content-Type: $type" );
+			$response->header( 'Cache-Control: private, max-age=3600' );
+			$response->header( 'Expires: ' . wfTimestamp( TS_RFC2822, time() + 3600 ) );
+			$response->header( 'Content-Length: ' . filesize( $path ) );
 			readfile( $path );
 		}
 	}
@@ -133,14 +134,16 @@ class SpecialFSIS extends SpecialPage {
 			$outputPage->addWikiTextAsInterface( Html::errorBox( $msg->plain() ) );
 		} elseif ( $fallback ) {
 			$outputPage->disable();
+			$response = $this->getRequest()->response();
 			$type = $this->getMimeType( $fallback );
-			header( "Content-Type: $type" );
-			header( 'Content-Length: ' . filesize( $fallback ) );
+			$response->header( "Content-Type: $type" );
+			$response->header( 'Content-Length: ' . filesize( $fallback ) );
 			readfile( $fallback );
 		} else {
 			$outputPage->disable();
-			header( 'Content-Type: text/plain' );
-			http_response_code( $statusCode );
+			$response = $this->getRequest()->response();
+			$response->statusHeader( $statusCode );
+			$response->header( 'Content-Type: text/plain' );
 			// @phan-suppress-next-line SecurityCheck-XSS
 			echo $msg->plain();
 		}
